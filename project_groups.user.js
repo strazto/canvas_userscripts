@@ -7,6 +7,7 @@
 // @include      /https?://.*\.(beta|test)\.instructure\.com/courses/\d+/groups/
 // @include      *://canvas.sydney.edu.au/courses/*/groups*
 // @icon         https://www.google.com/s2/favicons?domain=instructure.com
+// @require      https://cdn.jsdelivr.net/gh/CoeJoder/waitForKeyElements.js@v1.2/waitForKeyElements.js
 // @grant        GM_addStyle
 // ==/UserScript==
 
@@ -20,24 +21,19 @@
 
     const injected_stylesheet = `
         .unassigned-students {
-           position: fixed;
-           top: 20%;
-           right: 0;
-        }
-
-        .row-fluid .groups {
-           margin-left: 0;
+           position: sticky;
+           top: 0;
         }
     `;
 
     GM_addStyle(injected_stylesheet);
 
-    const script_info = document.createElement("div");
-    script_info.innerHTML = script_info_html;
+    waitForKeyElements(".unassigned-students", (elem) => {
+        const script_info = document.createElement("div");
+        script_info.innerHTML = script_info_html;
+        elem.appendChild(script_info);
+    });
 
-    const elem = document.querySelector(".unassigned-students");
-
-    elem.insertBefore(script_info, elem.firstElementChild);
 
 
 })();
